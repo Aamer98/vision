@@ -10,7 +10,7 @@ from ..utils import _log_api_usage_once
 from ._api import WeightsEnum, Weights
 from ._meta import _IMAGENET_CATEGORIES
 from ._utils import handle_legacy_interface, _ovewrite_named_param
-
+from norm_layers import BN
 
 __all__ = [
     "ResNet",
