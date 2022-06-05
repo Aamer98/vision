@@ -63,7 +63,7 @@ class BN(nn.Module):
 
         return out
 '''
-class FN(nn.BatchNorm2d):
+class BN(nn.BatchNorm2d):
     def __init__(self, num_features, eps=1e-5, momentum=0.1,
                  affine=True, track_running_stats=True):
         super(FN, self).__init__(
