@@ -20,6 +20,7 @@ CBN (Conditional Batch Normalization layer)
     uses an MLP to predict the beta and gamma parameters in the batch norm equation
     Reference : https://papers.nips.cc/paper/7237-modulating-early-visual-processing-by-language.pdf
 '''
+'''
 class BN(nn.Module):
 
     def __init__(self, channels):
@@ -60,7 +61,38 @@ class BN(nn.Module):
         out = torch.mul(feature_normalized, gammas_expanded) + betas_expanded
 
         return out
+'''
 
+
+class BN(nn.Module):
+    # `num_features`: the number of outputs for a fully-connected layer
+    # or the number of output channels for a convolutional layer. `num_dims`:
+    # 2 for a fully-connected layer and 4 for a convolutional layer
+    def __init__(self, num_features, num_dims):
+        super().__init__()
+        if num_dims == 2:
+            shape = (1, num_features)
+        else:
+            shape = (1, num_features, 1, 1)
+        # The scale parameter and the shift parameter (model parameters) are
+        # initialized to 1 and 0, respectively
+        self.gamma = nn.Parameter(torch.ones(shape))
+        self.beta = nn.Parameter(torch.zeros(shape))
+        # The variables that are not model parameters are initialized to 0 and 1
+        self.moving_mean = torch.zeros(shape)
+        self.moving_var = torch.ones(shape)
+
+    def forward(self, X):
+        # If `X` is not on the main memory, copy `moving_mean` and
+        # `moving_var` to the device where `X` is located
+        if self.moving_mean.device != X.device:
+            self.moving_mean = self.moving_mean.to(X.device)
+            self.moving_var = self.moving_var.to(X.device)
+        # Save the updated `moving_mean` and `moving_var`
+        Y, self.moving_mean, self.moving_var = batch_norm(
+            X, self.gamma, self.beta, self.moving_mean,
+            self.moving_var, eps=1e-5, momentum=0.9)
+        return Y
 
 class FN(nn.Module):
 
