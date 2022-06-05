@@ -66,7 +66,7 @@ class BN(nn.Module):
 class BN(nn.BatchNorm2d):
     def __init__(self, num_features, eps=1e-5, momentum=0.1,
                  affine=True, track_running_stats=True):
-        super(FN, self).__init__(
+        super(BN, self).__init__(
             num_features, eps, momentum, affine, track_running_stats)
 
     def forward(self, input):
