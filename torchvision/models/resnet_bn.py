@@ -315,7 +315,7 @@ class RegNet(nn.Module):
             block_type = ResBottleneckBlock
         if activation is None:
             activation = nn.ReLU
-
+        norm_layer = nn.BN
         # Ad hoc stem
         self.stem = stem_type(
             3,  # width_in
