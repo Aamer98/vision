@@ -28,8 +28,8 @@ class BN(nn.Module):
         self.channels = channels
 
         # beta and gamma parameters for each channel - defined as trainable parameters
-        self.betas = nn.Parameter(torch.zeros(32, self.channels))
-        self.gammas = nn.Parameter(torch.ones(32, self.channels))
+        self.betas = nn.Parameter(torch.zeros(32, self.channels).cuda())
+        self.gammas = nn.Parameter(torch.ones(32, self.channels).cuda())
 
 
     def forward(self, feature):
